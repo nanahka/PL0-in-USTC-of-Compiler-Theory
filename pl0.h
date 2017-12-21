@@ -4,10 +4,10 @@
 #define TRUE	   		1																			// added by nanahka 17-11-26
 #define FALSE	   		0
 
-#define NRW        		25     // number of reserved words
+#define NRW        		26     // number of reserved words
 #define TXMAX      		500    // length of identifier table
 #define MAXNUMLEN  		14     // maximum number of digits in numbers
-#define NSYM       		13     // maximum number of symbols in array ssym and csym
+#define NSYM       		14     // maximum number of symbols in array ssym and csym
 #define MAXIDLEN   		10     // length of identifiers
 #define MAXARYDIM  		10	   // maximum number of dimensions of an array							// added by nanahka 17-11-12
 #define MAXARYVOL  		200	   // maximum volume of a dimension of an array							// added by nanahka 17-11-12
@@ -18,7 +18,7 @@
 #define MAXLEVEL   		32     // maximum depth of nesting block
 #define CXMAX      		500    // size of code array
 
-#define MAXSYM     		51     // maximum number of symbols
+#define MAXSYM     		52     // maximum number of symbols
 
 #define STACKSIZE  		1000   // maximum storage
 
@@ -86,7 +86,9 @@ enum symtype
 	SYM_COLON,
 	SYM_GOTO,
 	SYM_VOID,					// added by nanahka 17-12-18
-	SYM_INT
+	SYM_INT,
+
+	SYM_PRINT					// added by nanahka 17-12-20
 };	// total number = MACRO MAXSYM, maintenance needed!!!
 
 enum idtype																						// merged by nanahka 17-12-15
@@ -97,7 +99,7 @@ enum idtype																						// merged by nanahka 17-12-15
 enum opcode
 {
 	LIT, OPR, LOD, LODI, LODS, LEA, STO, STOI, STOS,
-	CAL, CALS, INT, JMP, JPC, JND, JNDN, RET, EXT, JET											// modified by nanahka 17-12-19
+	CAL, CALS, INT, JMP, JPC, JND, JNDN, RET, EXT, JET, PRNT									// modified by nanahka 17-12-19
 };
 
 enum oprcode
@@ -116,7 +118,7 @@ enum environment                                           										//added by 
 
 enum control                                                       								//added by lzp 17/12/16
 {
-	CON_NULL, CON_BREAK, CON_CONTINUE                                   //mark the type of control statemnet
+	CON_NULL, CON_BREAK, CON_CONTINUE                                   //mark the type of control statement
 };
 
 
@@ -174,7 +176,7 @@ char* err_msg[] =
 /* 41 */	"Non-array type/incorrect indices.",	// modified by nanahka 17-12-16
 /* 42 */	"Too few parameters in a procedure.",
 /* 43 */    "'(' expected.",
-/* 44 */    "there must be a variable in 'for' statement.",
+/* 44 */    "There must be a variable in 'for' statement.",
 /* 45 */    "you must return a constant.",
 /* 46 */    "no more exit can be added.",
 /* 47 */    "'else' expected.",								// unused
@@ -187,7 +189,7 @@ char* err_msg[] =
 /* 54 */	"Incorrect type as an lvalue expression.",
 /* 55 */	"The symbol can not be as the beginning of a function call.",
 /* 56 */	"Non-procedure type/incorrect parameter types.",
-/* 57 */    "procedure can not be in a const factor.",
+/* 57 */    "procedure can not be in a const factor.",		// unused
 /* 58 */    "label must be followed by a statement.",
 /* 59 */    "Undeclared label.",
 /* 60 */	"Procedure can not be in const expression.",					// added by nanahka 17-12-16
@@ -240,7 +242,7 @@ char* word[NRW + 1] =
 	"if", "odd", "procedure", "then", "var", "while",
 	"else", "elif", "for", "return", "exit", "switch",
 	"case", "default", "break", "continue", "goto",
-	"void", "int"
+	"void", "int", "print"
 };
 
 int wsym[NRW + 1] =
@@ -249,7 +251,7 @@ int wsym[NRW + 1] =
 	SYM_TRUE, SYM_FALSE, SYM_IF, SYM_ODD, SYM_PROCEDURE, SYM_THEN,
 	SYM_VAR, SYM_WHILE, SYM_ELSE, SYM_ELIF, SYM_FOR, SYM_RETURN,
 	SYM_EXIT, SYM_SWITCH, SYM_CASE, SYM_DEFAULT, SYM_BREAK,
-	SYM_CONTINUE, SYM_GOTO, SYM_VOID, SYM_INT
+	SYM_CONTINUE, SYM_GOTO, SYM_VOID, SYM_INT, SYM_PRINT
 };
 
 int ssym[NSYM + 1] =
@@ -264,12 +266,12 @@ char csym[NSYM + 1] =
 	' ', '+', '-', '*', '/', '(', ')', '=', ',', '.', ';', '[', ']', '!'
 };
 
-#define MAXINS   19
+#define MAXINS   20
 char* mnemonic[MAXINS] =
 {
 	"LIT", "OPR", "LOD", "LODI", "LODS", "LEA", "STO", "STOI", "STOS",
 	"CAL", "CALS", "INT", "JMP", "JPC", "JND", "JNDN", "RET",
-	"EXT", "JET"
+	"EXT", "JET", "PRNT"
 };
 
 struct type																						// added by nanahka 17-12-15
